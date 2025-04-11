@@ -1,0 +1,1220 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "气象反演系统后端 HTTP REST API",
+        "title": "METEO SERVER API",
+        "contact": {},
+        "version": "0.0.1"
+    },
+    "basePath": "/meteo-server/v1",
+    "paths": {
+        "/meteo": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "气象数据"
+                ],
+                "summary": "查询多条气象数据",
+                "parameters": [
+                    {
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        },
+                        "collectionFormat": "csv",
+                        "description": "ID，支持多值",
+                        "name": "ids",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/resp.MeteoDsResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/meteo-ph": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "逐小时气象数据"
+                ],
+                "summary": "查询多条气象数据",
+                "parameters": [
+                    {
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        },
+                        "collectionFormat": "csv",
+                        "description": "ID，支持多值",
+                        "name": "ids",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/resp.MeteoDsResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/meteo-ph/detail": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "逐小时气象数据"
+                ],
+                "summary": "获取某经纬度气象数据详情",
+                "parameters": [
+                    {
+                        "type": "array",
+                        "items": {
+                            "type": "number"
+                        },
+                        "collectionFormat": "csv",
+                        "description": "经纬度坐标",
+                        "name": "loc",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/resp.MeteoDetailAndAlertResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/meteo-ph/focus-dist": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "逐小时气象数据"
+                ],
+                "summary": "查询关注地区气象数据",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "用户ID",
+                        "name": "user-id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/resp.FocusedDistMeteoResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/meteo-ph/services": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "逐小时气象数据"
+                ],
+                "summary": "获取中期与短临降雨预报免切片服务id列表",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/resp.MeteoServicesResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/meteo-ph/{id}": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "逐小时气象数据"
+                ],
+                "summary": "获取单点所有气象数据详情",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/resp.MeteoDataResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/meteo-ph/{id}/mid": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "逐小时气象数据"
+                ],
+                "summary": "获取单点中短期预报数据详情",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/resp.MidMeteoDataResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/meteo/alert": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "气象数据"
+                ],
+                "summary": "查询当前气象预警",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/resp.AlertOfSettingsResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/meteo/alert/{adcode}": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "气象数据"
+                ],
+                "summary": "查询某地当前气象预警",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "adcode",
+                        "name": "adcode",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/meteo/alerts": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "气象数据"
+                ],
+                "summary": "查询所有地区当前气象预警",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/resp.DistAlertsResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/meteo/detail": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "气象数据"
+                ],
+                "summary": "获取某经纬度气象数据详情",
+                "parameters": [
+                    {
+                        "type": "array",
+                        "items": {
+                            "type": "number"
+                        },
+                        "collectionFormat": "csv",
+                        "description": "经纬度坐标",
+                        "name": "loc",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/resp.MeteoDetailAndAlertResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/meteo/focus-dist": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "气象数据"
+                ],
+                "summary": "查询关注地区气象数据",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "用户ID",
+                        "name": "user-id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/resp.FocusedDistMeteoResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/meteo/gov-alerts": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "气象数据"
+                ],
+                "summary": "批量存储官方气象预警",
+                "parameters": [
+                    {
+                        "description": "预警信息",
+                        "name": "value",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/entity.GovAlert"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/meteo/service-opts": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "气象数据"
+                ],
+                "summary": "获取中期与短临降雨预报免切片相关配置",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/meteo/services": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "气象数据"
+                ],
+                "summary": "获取中期与短临降雨预报免切片服务id列表",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/resp.MeteoServicesResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/meteo/services/{tid}": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "气象数据"
+                ],
+                "summary": "获取某预报任务结果免切片服务id列表",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "task id",
+                        "name": "tid",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/resp.MeteoServicesResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/meteo/{id}": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "气象数据"
+                ],
+                "summary": "获取单点所有气象数据详情",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/resp.MeteoDataResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/meteo/{id}/mid": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "气象数据"
+                ],
+                "summary": "获取单点中短期预报数据详情",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/resp.MidMeteoDataResponse"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "dto.MeteoServices": {
+            "type": "object",
+            "properties": {
+                "humidity": {
+                    "description": "湿度服务id",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "mid_report_time": {
+                    "description": "中短期预报起报时间",
+                    "type": "string"
+                },
+                "mid_span": {
+                    "description": "中短期预报时间轴步长（秒）",
+                    "type": "integer"
+                },
+                "pressure": {
+                    "description": "气压服务id",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "rain": {
+                    "description": "降雨服务id",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "short_rain": {
+                    "description": "短临降雨服务id",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "short_report_time": {
+                    "description": "短临降雨起报时间",
+                    "type": "string"
+                },
+                "short_span": {
+                    "description": "短临预报时间轴步长（秒）",
+                    "type": "integer"
+                },
+                "temperature": {
+                    "description": "气温服务id",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "windSpeed": {
+                    "description": "风速服务id",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "windUv": {
+                    "description": "UV风服务id",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                }
+            }
+        },
+        "entity.AlertOfSetting": {
+            "type": "object",
+            "properties": {
+                "alert": {
+                    "type": "object"
+                },
+                "id": {
+                    "description": "ID",
+                    "type": "integer"
+                },
+                "section": {
+                    "description": "设置所属分栏，enum(预警-alert)",
+                    "type": "string"
+                },
+                "value": {
+                    "description": "设置的值",
+                    "type": "object"
+                }
+            }
+        },
+        "entity.DistAlert": {
+            "type": "object",
+            "properties": {
+                "adcode": {
+                    "type": "string"
+                },
+                "alert": {
+                    "type": "object"
+                },
+                "center": {
+                    "type": "array",
+                    "items": {
+                        "type": "number"
+                    }
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "entity.GovAlert": {
+            "type": "object",
+            "properties": {
+                "adcode": {
+                    "description": "地区编码",
+                    "type": "integer"
+                },
+                "end_at": {
+                    "description": "结束时间",
+                    "type": "string"
+                },
+                "id": {
+                    "description": "ID",
+                    "type": "integer"
+                },
+                "index": {
+                    "description": "索引（网格id-1）",
+                    "type": "integer"
+                },
+                "info": {
+                    "description": "预警信息",
+                    "type": "object"
+                },
+                "pub_at": {
+                    "description": "发布时间",
+                    "type": "string"
+                }
+            }
+        },
+        "entity.HistoryMeteoDetail": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "description": "格点一维坐标：Y * 6939 + X + 1",
+                    "type": "integer"
+                },
+                "last_precip": {
+                    "description": "去年同月份降雨量",
+                    "type": "integer"
+                },
+                "last_t2": {
+                    "description": "去年同月份积温",
+                    "type": "integer"
+                },
+                "precip": {
+                    "description": "12个月降雨量，12个值，分别对应最近的 1——12月份",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "t2": {
+                    "description": "12个月积温，12个值，分别对应最近的 1——12月份",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                }
+            }
+        },
+        "entity.MeteoData": {
+            "type": "object",
+            "properties": {
+                "history": {
+                    "description": "历史气象数据",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/entity.HistoryMeteoDetail"
+                        }
+                    ]
+                },
+                "id": {
+                    "description": "格点一维坐标：Y * 6939 + X + 1",
+                    "type": "integer"
+                },
+                "precip": {
+                    "description": "降雨预报，6小时间隔，7天区间",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "pressure": {
+                    "description": "气压预报，6小时间隔，7天区间",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "rh2": {
+                    "description": "湿度预报，6小时间隔，7天区间",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "short_precip": {
+                    "description": "短临降雨预报，6分钟间隔，3小时区间，共30个",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "t2": {
+                    "description": "气温预报，6小时间隔，7天区间",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "wdir10": {
+                    "description": "风向预报，6小时间隔，7天区间",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "ws": {
+                    "description": "风速预报，6小时间隔，7天区间",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                }
+            }
+        },
+        "entity.MeteoDataList": {
+            "type": "object",
+            "properties": {
+                "list": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/entity.MeteoData"
+                    }
+                },
+                "mid_report_time": {
+                    "description": "中短期预报起报时间",
+                    "type": "string"
+                },
+                "mid_span": {
+                    "description": "中短期预报时间轴步长（秒）",
+                    "type": "integer"
+                },
+                "short_report_time": {
+                    "description": "短临降雨起报时间",
+                    "type": "string"
+                },
+                "short_span": {
+                    "description": "短临预报时间轴步长（秒）",
+                    "type": "integer"
+                }
+            }
+        },
+        "entity.MeteoDataOne": {
+            "type": "object",
+            "properties": {
+                "history": {
+                    "description": "历史气象数据",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/entity.HistoryMeteoDetail"
+                        }
+                    ]
+                },
+                "id": {
+                    "description": "格点一维坐标：Y * 6939 + X + 1",
+                    "type": "integer"
+                },
+                "mid_report_time": {
+                    "description": "中短期预报起报时间",
+                    "type": "string"
+                },
+                "mid_span": {
+                    "description": "中短期预报时间轴步长（秒）",
+                    "type": "integer"
+                },
+                "precip": {
+                    "description": "降雨预报，6小时间隔，7天区间",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "pressure": {
+                    "description": "气压预报，6小时间隔，7天区间",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "rh2": {
+                    "description": "湿度预报，6小时间隔，7天区间",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "short_precip": {
+                    "description": "短临降雨预报，6分钟间隔，3小时区间，共30个",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "short_report_time": {
+                    "description": "短临降雨起报时间",
+                    "type": "string"
+                },
+                "short_span": {
+                    "description": "短临预报时间轴步长（秒）",
+                    "type": "integer"
+                },
+                "t2": {
+                    "description": "气温预报，6小时间隔，7天区间",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "wdir10": {
+                    "description": "风向预报，6小时间隔，7天区间",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "ws": {
+                    "description": "风速预报，6小时间隔，7天区间",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                }
+            }
+        },
+        "entity.MidMeteoData": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "description": "格点一维坐标：Y * 6939 + X + 1",
+                    "type": "integer"
+                },
+                "mid_report_time": {
+                    "description": "中短期预报起报时间",
+                    "type": "string"
+                },
+                "mid_span": {
+                    "description": "中短期预报时间轴步长（秒）",
+                    "type": "integer"
+                },
+                "precip": {
+                    "description": "降雨预报，6小时间隔，7天区间",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "pressure": {
+                    "description": "气压预报，6小时间隔，7天区间",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "rh2": {
+                    "description": "湿度预报，6小时间隔，7天区间",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "short_precip": {
+                    "description": "短临降雨预报，6分钟间隔，3小时区间，共30个",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "short_report_time": {
+                    "description": "短临降雨起报时间",
+                    "type": "string"
+                },
+                "short_span": {
+                    "description": "短临预报时间轴步长（秒）",
+                    "type": "integer"
+                },
+                "t2": {
+                    "description": "气温预报，6小时间隔，7天区间",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "wdir10": {
+                    "description": "风向预报，6小时间隔，7天区间",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "ws": {
+                    "description": "风速预报，6小时间隔，7天区间",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                }
+            }
+        },
+        "resp.AlertOfSettingsResponse": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "code",
+                    "type": "integer",
+                    "enum": [
+                        200,
+                        400,
+                        401,
+                        500
+                    ]
+                },
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/entity.AlertOfSetting"
+                    }
+                },
+                "msg": {
+                    "description": "message",
+                    "type": "string"
+                }
+            }
+        },
+        "resp.DistAlertsResponse": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "code",
+                    "type": "integer",
+                    "enum": [
+                        200,
+                        400,
+                        401,
+                        500
+                    ]
+                },
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/entity.DistAlert"
+                    }
+                },
+                "msg": {
+                    "description": "message",
+                    "type": "string"
+                }
+            }
+        },
+        "resp.FocusedDistMeteo": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "description": "ID",
+                    "type": "integer"
+                },
+                "meteo": {
+                    "$ref": "#/definitions/entity.MidMeteoData"
+                },
+                "section": {
+                    "description": "设置所属分栏，enum(预警-alert)",
+                    "type": "string"
+                },
+                "value": {
+                    "description": "设置的值",
+                    "type": "object"
+                }
+            }
+        },
+        "resp.FocusedDistMeteoResponse": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "code",
+                    "type": "integer",
+                    "enum": [
+                        200,
+                        400,
+                        401,
+                        500
+                    ]
+                },
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/resp.FocusedDistMeteo"
+                    }
+                },
+                "msg": {
+                    "description": "message",
+                    "type": "string"
+                }
+            }
+        },
+        "resp.MeteoDataResponse": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "code",
+                    "type": "integer",
+                    "enum": [
+                        200,
+                        400,
+                        401,
+                        500
+                    ]
+                },
+                "data": {
+                    "$ref": "#/definitions/entity.MeteoDataOne"
+                },
+                "msg": {
+                    "description": "message",
+                    "type": "string"
+                }
+            }
+        },
+        "resp.MeteoDetailAndAlert": {
+            "type": "object",
+            "properties": {
+                "alert": {
+                    "description": "气象预警列表",
+                    "type": "object"
+                },
+                "id": {
+                    "description": "格点一维坐标：Y * 6939 + X + 1",
+                    "type": "integer"
+                },
+                "mid_report_time": {
+                    "description": "中短期预报起报时间",
+                    "type": "string"
+                },
+                "mid_span": {
+                    "description": "中短期预报时间轴步长（秒）",
+                    "type": "integer"
+                },
+                "precip": {
+                    "description": "降雨预报，6小时间隔，7天区间",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "pressure": {
+                    "description": "气压预报，6小时间隔，7天区间",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "rh2": {
+                    "description": "湿度预报，6小时间隔，7天区间",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "short_precip": {
+                    "description": "短临降雨预报，6分钟间隔，3小时区间，共30个",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "short_report_time": {
+                    "description": "短临降雨起报时间",
+                    "type": "string"
+                },
+                "short_span": {
+                    "description": "短临预报时间轴步长（秒）",
+                    "type": "integer"
+                },
+                "t2": {
+                    "description": "气温预报，6小时间隔，7天区间",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "wdir10": {
+                    "description": "风向预报，6小时间隔，7天区间",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "ws": {
+                    "description": "风速预报，6小时间隔，7天区间",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                }
+            }
+        },
+        "resp.MeteoDetailAndAlertResponse": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "code",
+                    "type": "integer",
+                    "enum": [
+                        200,
+                        400,
+                        401,
+                        500
+                    ]
+                },
+                "data": {
+                    "$ref": "#/definitions/resp.MeteoDetailAndAlert"
+                },
+                "msg": {
+                    "description": "message",
+                    "type": "string"
+                }
+            }
+        },
+        "resp.MeteoDsResponse": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "code",
+                    "type": "integer",
+                    "enum": [
+                        200,
+                        400,
+                        401,
+                        500
+                    ]
+                },
+                "data": {
+                    "$ref": "#/definitions/entity.MeteoDataList"
+                },
+                "msg": {
+                    "description": "message",
+                    "type": "string"
+                }
+            }
+        },
+        "resp.MeteoServicesResponse": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "code",
+                    "type": "integer",
+                    "enum": [
+                        200,
+                        400,
+                        401,
+                        500
+                    ]
+                },
+                "data": {
+                    "$ref": "#/definitions/dto.MeteoServices"
+                },
+                "msg": {
+                    "description": "message",
+                    "type": "string"
+                }
+            }
+        },
+        "resp.MidMeteoDataResponse": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "code",
+                    "type": "integer",
+                    "enum": [
+                        200,
+                        400,
+                        401,
+                        500
+                    ]
+                },
+                "data": {
+                    "$ref": "#/definitions/entity.MidMeteoData"
+                },
+                "msg": {
+                    "description": "message",
+                    "type": "string"
+                }
+            }
+        },
+        "resp.Response": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "code",
+                    "type": "integer",
+                    "enum": [
+                        200,
+                        400,
+                        401,
+                        500
+                    ]
+                },
+                "data": {
+                    "description": "data",
+                    "type": "object"
+                },
+                "msg": {
+                    "description": "message",
+                    "type": "string"
+                }
+            }
+        }
+    }
+}
