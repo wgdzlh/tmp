@@ -1,0 +1,3298 @@
+{
+    "schemes": [],
+    "swagger": "2.0",
+    "info": {
+        "description": "气象反演系统后端 HTTP REST API",
+        "title": "METEO SERVER API",
+        "contact": {},
+        "version": "0.0.1"
+    },
+    "host": "",
+    "basePath": "/meteo-server/v1",
+    "paths": {
+        "/alert-opt": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "预警设置"
+                ],
+                "summary": "查询预警设置列表",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "可选只返回特定地区的设置",
+                        "name": "adcode",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/resp.AlertOptsResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "预警设置"
+                ],
+                "summary": "新增预警设置项",
+                "parameters": [
+                    {
+                        "description": "预警设置的值",
+                        "name": "value",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.NewAlertOpt"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/resp.IdResponse"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "预警设置"
+                ],
+                "summary": "批量删除预警设置项",
+                "parameters": [
+                    {
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        },
+                        "collectionFormat": "csv",
+                        "description": "ids",
+                        "name": "ids",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/alert-opt/{id}": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "预警设置"
+                ],
+                "summary": "获取单个预警设置项详情",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/resp.AlertOptResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/feedback": {
+            "post": {
+                "description": "使用multipart form格式上传反馈JSON与照片：curl -X POST http://xxx -F \"content={...}\" -F \"file=@/home/xxx.jpeg\" -H \"Content-Type: multipart/form-data\"",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "反馈"
+                ],
+                "summary": "新增反馈",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "反馈内容（JSON格式）",
+                        "name": "content",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "file",
+                        "description": "要上传的单张照片（可选）",
+                        "name": "file",
+                        "in": "formData"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/resp.IdResponse"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "反馈"
+                ],
+                "summary": "批量删除反馈",
+                "parameters": [
+                    {
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        },
+                        "collectionFormat": "csv",
+                        "description": "ids",
+                        "name": "ids",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/feedback/{id}": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "反馈"
+                ],
+                "summary": "获取单个反馈详情",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/resp.FeedbackResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/labeling": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "勾画图斑"
+                ],
+                "summary": "查询勾画图斑列表",
+                "parameters": [
+                    {
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        },
+                        "collectionFormat": "csv",
+                        "description": "关联矢量图层ID列表",
+                        "name": "vec_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/resp.LabelingDataResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "勾画图斑"
+                ],
+                "summary": "批量新增/更新勾画图斑",
+                "parameters": [
+                    {
+                        "description": "图斑定义，单个或者多个都可以",
+                        "name": "value",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/entity.LabelingData"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/resp.LabelingDataResponse"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "勾画图斑"
+                ],
+                "summary": "批量删除勾画图斑",
+                "parameters": [
+                    {
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        },
+                        "collectionFormat": "csv",
+                        "description": "ids",
+                        "name": "ids",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/labeling/buff": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "勾画图斑"
+                ],
+                "summary": "批量获取图斑缓冲区",
+                "parameters": [
+                    {
+                        "description": "图斑WKT定义及外扩距离（单位：千米）",
+                        "name": "value",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/entity.TmpWktBuff"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/resp.TmpWktBuffResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/labeling/{id}": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "勾画图斑"
+                ],
+                "summary": "获取单个勾画图斑详情",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/resp.LabelingDatResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/meteo": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "气象数据"
+                ],
+                "summary": "查询多条气象数据",
+                "parameters": [
+                    {
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        },
+                        "collectionFormat": "csv",
+                        "description": "ID，支持多值",
+                        "name": "ids",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/resp.MeteoDsResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/meteo-ph": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "逐小时气象数据"
+                ],
+                "summary": "查询多条气象数据",
+                "parameters": [
+                    {
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        },
+                        "collectionFormat": "csv",
+                        "description": "ID，支持多值",
+                        "name": "ids",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/resp.MeteoDsResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/meteo-ph/detail": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "逐小时气象数据"
+                ],
+                "summary": "获取某经纬度气象数据详情",
+                "parameters": [
+                    {
+                        "type": "array",
+                        "items": {
+                            "type": "number"
+                        },
+                        "collectionFormat": "csv",
+                        "description": "经纬度坐标",
+                        "name": "loc",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/resp.MeteoDetailAndAlertResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/meteo-ph/focus-dist": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "逐小时气象数据"
+                ],
+                "summary": "查询关注地区气象数据",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "用户ID",
+                        "name": "user-id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/resp.FocusedDistMeteoResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/meteo-ph/services": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "逐小时气象数据"
+                ],
+                "summary": "获取中期与短临降雨预报免切片服务id列表",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/resp.MeteoServicesResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/meteo-ph/{id}": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "逐小时气象数据"
+                ],
+                "summary": "获取单点所有气象数据详情",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/resp.MeteoDataResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/meteo-ph/{id}/mid": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "逐小时气象数据"
+                ],
+                "summary": "获取单点中短期预报数据详情",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/resp.MidMeteoDataResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/meteo/alert": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "气象数据"
+                ],
+                "summary": "查询当前气象预警",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/resp.AlertOfSettingsResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/meteo/alert/{adcode}": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "气象数据"
+                ],
+                "summary": "查询某地当前气象预警",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "adcode",
+                        "name": "adcode",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/meteo/alerts": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "气象数据"
+                ],
+                "summary": "查询所有地区当前气象预警",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/resp.DistAlertsResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/meteo/detail": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "气象数据"
+                ],
+                "summary": "获取某经纬度气象数据详情",
+                "parameters": [
+                    {
+                        "type": "array",
+                        "items": {
+                            "type": "number"
+                        },
+                        "collectionFormat": "csv",
+                        "description": "经纬度坐标",
+                        "name": "loc",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/resp.MeteoDetailAndAlertResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/meteo/focus-dist": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "气象数据"
+                ],
+                "summary": "查询关注地区气象数据",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "用户ID",
+                        "name": "user-id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/resp.FocusedDistMeteoResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/meteo/gov-alerts": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "气象数据"
+                ],
+                "summary": "批量存储官方气象预警",
+                "parameters": [
+                    {
+                        "description": "预警信息",
+                        "name": "value",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/entity.GovAlert"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/meteo/service-opts": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "气象数据"
+                ],
+                "summary": "获取中期与短临降雨预报免切片相关配置",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/meteo/services": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "气象数据"
+                ],
+                "summary": "获取中期与短临降雨预报免切片服务id列表",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/resp.MeteoServicesResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/meteo/services/{tid}": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "气象数据"
+                ],
+                "summary": "获取某预报任务结果免切片服务id列表",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "task id",
+                        "name": "tid",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/resp.MeteoServicesResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/meteo/{id}": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "气象数据"
+                ],
+                "summary": "获取单点所有气象数据详情",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/resp.MeteoDataResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/meteo/{id}/mid": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "气象数据"
+                ],
+                "summary": "获取单点中短期预报数据详情",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/resp.MidMeteoDataResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/setting": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "设置"
+                ],
+                "summary": "查询设置列表",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "设置所属的分栏，enum(预警-alert,关注地区-focus)",
+                        "name": "section",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "用户ID",
+                        "name": "user_id",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/resp.SettingsResponse"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "设置"
+                ],
+                "summary": "批量删除设置项",
+                "parameters": [
+                    {
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        },
+                        "collectionFormat": "csv",
+                        "description": "ids",
+                        "name": "ids",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/setting/alert": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "设置"
+                ],
+                "summary": "新增预警设置项",
+                "parameters": [
+                    {
+                        "description": "设置的值",
+                        "name": "alertDistConfig",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/entity.AlertDistConfig"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/resp.IdResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/setting/alert/{adcode}": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "设置"
+                ],
+                "summary": "查询特定地区预警设置",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "adcode",
+                        "name": "adcode",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/resp.SettingResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/setting/focus": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "设置"
+                ],
+                "summary": "新增关注地区",
+                "parameters": [
+                    {
+                        "description": "设置的值",
+                        "name": "focusDist",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/entity.FocusDist"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/resp.IdResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/setting/shapefile": {
+            "post": {
+                "description": "使用multipart form格式上传zip：curl -X POST http://xxx -F \"file=@/home/test/test.zip\" -H \"Content-Type: multipart/form-data\"",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "设置"
+                ],
+                "summary": "将包含shp的zip压缩包转为WKT(srid=4326)",
+                "parameters": [
+                    {
+                        "type": "file",
+                        "description": "upload target",
+                        "name": "file",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/setting/{id}": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "设置"
+                ],
+                "summary": "获取单个设置项详情",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/resp.SettingResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/setting/{section}": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "设置"
+                ],
+                "summary": "新增设置项",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "设置所属的分栏",
+                        "name": "section",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "设置的值",
+                        "name": "value",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/resp.IdResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/setting/{section}/order": {
+            "put": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "设置"
+                ],
+                "summary": "修改设置项排序",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "设置所属的分栏",
+                        "name": "section",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        },
+                        "collectionFormat": "csv",
+                        "description": "ids",
+                        "name": "ids",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/task": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "后台任务"
+                ],
+                "summary": "查询后台任务列表",
+                "parameters": [
+                    {
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        },
+                        "collectionFormat": "csv",
+                        "description": "ID，支持多值",
+                        "name": "id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "任务大类型：enum(自动任务-cron,下载任务-download)",
+                        "name": "genre",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "任务子类型：enum(短临降雨-short,7天预报-mid,专题图-factor,反演报告-deduce)",
+                        "name": "type",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "行政区划编码",
+                        "name": "adcode",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "要素类型",
+                        "name": "factor",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "任务状态：enum(NotStarted,InProc,Done,Skipped,Failed)",
+                        "name": "status",
+                        "in": "query"
+                    },
+                    {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "csv",
+                        "description": "创建时间（起止时间格式：2022-07-20 10:00:00,2022-07-21 10:00:00），只传一个表示不限制另一个",
+                        "name": "created_at",
+                        "in": "query"
+                    },
+                    {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "csv",
+                        "description": "起报时间（起止时间格式：2022-07-20 10:00:00,2022-07-21 10:00:00），只传一个表示不限制另一个",
+                        "name": "report_time",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "页码，从1开始",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "页面大小，默认10",
+                        "name": "size",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/resp.CronTasksResponse"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "后台任务"
+                ],
+                "summary": "批量删除后台任务",
+                "parameters": [
+                    {
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        },
+                        "collectionFormat": "csv",
+                        "description": "ids",
+                        "name": "ids",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/task/meteo": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "后台任务"
+                ],
+                "summary": "新增气象任务",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "气象任务类型，enum(short,mid)",
+                        "name": "type",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "气象任务起报时间：202409031724，2024090308",
+                        "name": "rt",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/task/{id}": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "后台任务"
+                ],
+                "summary": "获取单个后台任务详情",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/resp.CronTaskResponse"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "重启失败状态的自动气象预报任务",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "后台任务"
+                ],
+                "summary": "重启后台任务",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/task/{id}/download": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "后台任务"
+                ],
+                "summary": "申请下载任务数据",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "下载任务参数",
+                        "name": "factorThemeReq",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/entity.TaskFactorThemeReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/resp.IdResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/task/{id}/stop": {
+            "put": {
+                "description": "终止排队中或处理中状态的后台任务，并将其状态设为失败",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "后台任务"
+                ],
+                "summary": "终止后台任务",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/task/{id}/zip": {
+            "get": {
+                "produces": [
+                    "application/zip"
+                ],
+                "tags": [
+                    "后台任务"
+                ],
+                "summary": "下载任务数据",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "file"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        },
+        "/vector": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "矢量图层"
+                ],
+                "summary": "查询矢量图层列表",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "图层名称关键词",
+                        "name": "name",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/resp.VectorLayersResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "矢量图层"
+                ],
+                "summary": "新增/更新矢量图层",
+                "parameters": [
+                    {
+                        "description": "矢量图层定义，id为0时新增，否则更新",
+                        "name": "value",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.NewVectorLayer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/resp.IdResponse"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "矢量图层"
+                ],
+                "summary": "批量删除矢量图层",
+                "parameters": [
+                    {
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        },
+                        "collectionFormat": "csv",
+                        "description": "ids",
+                        "name": "ids",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/vector/download": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "矢量图层"
+                ],
+                "summary": "申请下载最新气象任务数据",
+                "parameters": [
+                    {
+                        "description": "下载任务参数",
+                        "name": "factorThemeReq",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/entity.SpanFactorThemeReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/resp.IdsResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/vector/upload": {
+            "post": {
+                "description": "使用multipart form格式上传zip：curl -X POST http://xxx -F \"file=@/home/test/test.zip\" -H \"Content-Type: multipart/form-data\"",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "矢量图层"
+                ],
+                "summary": "上传矢量图层shp",
+                "parameters": [
+                    {
+                        "type": "file",
+                        "description": "要上传的shp打包成的zip",
+                        "name": "file",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/resp.TmpShpRetResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/vector/{id}": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "矢量图层"
+                ],
+                "summary": "获取单个矢量图层详情",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/resp.VectorLayerResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/wx/api-sig": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "微信公众号"
+                ],
+                "summary": "获取接口签名",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "要签名的js api",
+                        "name": "api",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "微信app的Id",
+                        "name": "appid",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "微信app的secret",
+                        "name": "secret",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/resp.JsApiSigResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/wx/user-info": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "微信公众号"
+                ],
+                "summary": "获取用户信息",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "微信app的Id",
+                        "name": "appid",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "微信app的secret",
+                        "name": "secret",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "页面登录code",
+                        "name": "code",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "类型",
+                        "name": "grant_type",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/wx/verify": {
+            "get": {
+                "produces": [
+                    "text/plain"
+                ],
+                "tags": [
+                    "微信公众号"
+                ],
+                "summary": "验证签名",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "dto.MeteoServices": {
+            "type": "object",
+            "properties": {
+                "humidity": {
+                    "description": "湿度服务id",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "mid_report_time": {
+                    "description": "中短期预报起报时间",
+                    "type": "string"
+                },
+                "mid_span": {
+                    "description": "中短期预报时间轴步长（秒）",
+                    "type": "integer"
+                },
+                "pressure": {
+                    "description": "气压服务id",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "rain": {
+                    "description": "降雨服务id",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "short_rain": {
+                    "description": "短临降雨服务id",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "short_report_time": {
+                    "description": "短临降雨起报时间",
+                    "type": "string"
+                },
+                "short_span": {
+                    "description": "短临预报时间轴步长（秒）",
+                    "type": "integer"
+                },
+                "temperature": {
+                    "description": "气温服务id",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "windSpeed": {
+                    "description": "风速服务id",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "windUv": {
+                    "description": "UV风服务id",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                }
+            }
+        },
+        "dto.NewAlertOpt": {
+            "type": "object",
+            "properties": {
+                "adcode": {
+                    "description": "行政区划编码",
+                    "type": "string"
+                },
+                "district": {
+                    "description": "行政区划名称",
+                    "type": "string"
+                },
+                "type": {
+                    "description": "预警类型",
+                    "type": "string"
+                },
+                "value": {
+                    "description": "设置的值",
+                    "type": "object"
+                }
+            }
+        },
+        "dto.NewVectorLayer": {
+            "type": "object",
+            "properties": {
+                "desc": {
+                    "description": "描述",
+                    "type": "string"
+                },
+                "distance": {
+                    "description": "图斑默认外扩距离（单位：千米）(可选)",
+                    "type": "integer"
+                },
+                "id": {
+                    "description": "ID, 新增时不传",
+                    "type": "integer"
+                },
+                "name": {
+                    "description": "名称",
+                    "type": "string"
+                },
+                "uid": {
+                    "description": "已上传shp的uid（可选，即upload接口返回的data字段中的uid）",
+                    "type": "string"
+                }
+            }
+        },
+        "entity.AlertDistConfig": {
+            "type": "object",
+            "properties": {
+                "adcode": {
+                    "description": "行政区划编码",
+                    "type": "string"
+                },
+                "district": {
+                    "description": "行政区划名称",
+                    "type": "string"
+                },
+                "lat_lon": {
+                    "description": "经纬度范围，排序：经度最小值，经度最大值，纬度最小值，纬度最大值",
+                    "type": "array",
+                    "items": {
+                        "type": "number"
+                    }
+                },
+                "wkt": {
+                    "description": "输入范围的WKT",
+                    "type": "string"
+                }
+            }
+        },
+        "entity.AlertOfSetting": {
+            "type": "object",
+            "properties": {
+                "alert": {
+                    "type": "object"
+                },
+                "id": {
+                    "description": "ID",
+                    "type": "integer"
+                },
+                "section": {
+                    "description": "设置所属分栏，enum(预警-alert)",
+                    "type": "string"
+                },
+                "value": {
+                    "description": "设置的值",
+                    "type": "object"
+                }
+            }
+        },
+        "entity.AlertOpt": {
+            "type": "object",
+            "properties": {
+                "adcode": {
+                    "description": "行政区划编码",
+                    "type": "string"
+                },
+                "created_at": {
+                    "description": "创建时间",
+                    "type": "string"
+                },
+                "district": {
+                    "description": "行政区划名称",
+                    "type": "string"
+                },
+                "id": {
+                    "description": "ID",
+                    "type": "integer"
+                },
+                "type": {
+                    "description": "预警类型",
+                    "type": "string"
+                },
+                "updated_at": {
+                    "description": "修改时间",
+                    "type": "string"
+                },
+                "value": {
+                    "description": "设置的值",
+                    "type": "object"
+                }
+            }
+        },
+        "entity.CronTask": {
+            "type": "object",
+            "properties": {
+                "assignment_id": {
+                    "description": "关联的流程控制ID",
+                    "type": "integer"
+                },
+                "auto_retry": {
+                    "description": "重试次数",
+                    "type": "integer"
+                },
+                "created_at": {
+                    "description": "创建时间",
+                    "type": "string"
+                },
+                "dir": {
+                    "description": "任务输出目录",
+                    "type": "string"
+                },
+                "end_at": {
+                    "description": "结束时间",
+                    "type": "string"
+                },
+                "err_log": {
+                    "description": "任务错误日志",
+                    "type": "string"
+                },
+                "ext": {
+                    "description": "任务扩展信息",
+                    "type": "object"
+                },
+                "ext_id": {
+                    "description": "关联的外部任务/流程ID",
+                    "type": "integer"
+                },
+                "genre": {
+                    "description": "任务大类型 enum(cron,download)",
+                    "type": "string"
+                },
+                "group_id": {
+                    "description": "关联的任务组ID",
+                    "type": "string"
+                },
+                "id": {
+                    "description": "ID",
+                    "type": "integer"
+                },
+                "name": {
+                    "description": "任务名称",
+                    "type": "string"
+                },
+                "params": {
+                    "description": "任务参数",
+                    "type": "object"
+                },
+                "progress": {
+                    "description": "进度",
+                    "type": "number"
+                },
+                "src_id": {
+                    "description": "源任务ID",
+                    "type": "integer"
+                },
+                "start_at": {
+                    "description": "开始时间",
+                    "type": "string"
+                },
+                "status": {
+                    "description": "任务状态 enum(NotStarted,InProc,Done,Skipped,Failed)",
+                    "type": "string"
+                },
+                "type": {
+                    "description": "任务子类型 enum(short,mid,factor,deduce)",
+                    "type": "string"
+                }
+            }
+        },
+        "entity.DistAlert": {
+            "type": "object",
+            "properties": {
+                "adcode": {
+                    "type": "string"
+                },
+                "alert": {
+                    "type": "object"
+                },
+                "center": {
+                    "type": "array",
+                    "items": {
+                        "type": "number"
+                    }
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "entity.Feedback": {
+            "type": "object",
+            "properties": {
+                "content": {
+                    "description": "反馈内容",
+                    "type": "object"
+                },
+                "created_at": {
+                    "description": "创建时间（自动生成）",
+                    "type": "string"
+                },
+                "id": {
+                    "description": "ID",
+                    "type": "integer"
+                },
+                "upload_pic": {
+                    "description": "上传图片路径",
+                    "type": "string"
+                }
+            }
+        },
+        "entity.FocusDist": {
+            "type": "object",
+            "properties": {
+                "adcode": {
+                    "description": "行政区划编码",
+                    "type": "string"
+                },
+                "center": {
+                    "description": "行政区划中心点坐标",
+                    "type": "array",
+                    "items": {
+                        "type": "number"
+                    }
+                },
+                "district": {
+                    "description": "行政区划名称",
+                    "type": "string"
+                },
+                "idx": {
+                    "type": "integer"
+                },
+                "user_id": {
+                    "description": "用户ID",
+                    "type": "string"
+                }
+            }
+        },
+        "entity.GovAlert": {
+            "type": "object",
+            "properties": {
+                "adcode": {
+                    "description": "地区编码",
+                    "type": "integer"
+                },
+                "end_at": {
+                    "description": "结束时间",
+                    "type": "string"
+                },
+                "id": {
+                    "description": "ID",
+                    "type": "integer"
+                },
+                "index": {
+                    "description": "索引（网格id-1）",
+                    "type": "integer"
+                },
+                "info": {
+                    "description": "预警信息",
+                    "type": "object"
+                },
+                "pub_at": {
+                    "description": "发布时间",
+                    "type": "string"
+                }
+            }
+        },
+        "entity.HistoryMeteoDetail": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "description": "格点一维坐标：Y * 6939 + X + 1",
+                    "type": "integer"
+                },
+                "last_precip": {
+                    "description": "去年同月份降雨量",
+                    "type": "integer"
+                },
+                "last_t2": {
+                    "description": "去年同月份积温",
+                    "type": "integer"
+                },
+                "precip": {
+                    "description": "12个月降雨量，12个值，分别对应最近的 1——12月份",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "t2": {
+                    "description": "12个月积温，12个值，分别对应最近的 1——12月份",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                }
+            }
+        },
+        "entity.JsApiSig": {
+            "type": "object",
+            "properties": {
+                "nonceStr": {
+                    "type": "string"
+                },
+                "signature": {
+                    "type": "string"
+                },
+                "timestamp": {
+                    "type": "integer"
+                }
+            }
+        },
+        "entity.LabelingData": {
+            "type": "object",
+            "properties": {
+                "buff": {
+                    "description": "图斑缓冲区Geo WKT(SRID:4326)（自动生成）",
+                    "type": "string"
+                },
+                "distance": {
+                    "description": "图斑外扩距离（单位：千米）",
+                    "type": "integer"
+                },
+                "geom": {
+                    "description": "图斑定义Geo WKT(SRID:4326)",
+                    "type": "string"
+                },
+                "id": {
+                    "description": "图斑ID",
+                    "type": "integer"
+                },
+                "vec_id": {
+                    "description": "关联矢量图层ID",
+                    "type": "integer"
+                }
+            }
+        },
+        "entity.MeteoData": {
+            "type": "object",
+            "properties": {
+                "history": {
+                    "description": "历史气象数据",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/entity.HistoryMeteoDetail"
+                        }
+                    ]
+                },
+                "id": {
+                    "description": "格点一维坐标：Y * 6939 + X + 1",
+                    "type": "integer"
+                },
+                "precip": {
+                    "description": "降雨预报，6小时间隔，7天区间",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "pressure": {
+                    "description": "气压预报，6小时间隔，7天区间",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "rh2": {
+                    "description": "湿度预报，6小时间隔，7天区间",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "short_precip": {
+                    "description": "短临降雨预报，6分钟间隔，3小时区间，共30个",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "t2": {
+                    "description": "气温预报，6小时间隔，7天区间",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "wdir10": {
+                    "description": "风向预报，6小时间隔，7天区间",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "ws": {
+                    "description": "风速预报，6小时间隔，7天区间",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                }
+            }
+        },
+        "entity.MeteoDataList": {
+            "type": "object",
+            "properties": {
+                "list": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/entity.MeteoData"
+                    }
+                },
+                "mid_report_time": {
+                    "description": "中短期预报起报时间",
+                    "type": "string"
+                },
+                "mid_span": {
+                    "description": "中短期预报时间轴步长（秒）",
+                    "type": "integer"
+                },
+                "short_report_time": {
+                    "description": "短临降雨起报时间",
+                    "type": "string"
+                },
+                "short_span": {
+                    "description": "短临预报时间轴步长（秒）",
+                    "type": "integer"
+                }
+            }
+        },
+        "entity.MeteoDataOne": {
+            "type": "object",
+            "properties": {
+                "history": {
+                    "description": "历史气象数据",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/entity.HistoryMeteoDetail"
+                        }
+                    ]
+                },
+                "id": {
+                    "description": "格点一维坐标：Y * 6939 + X + 1",
+                    "type": "integer"
+                },
+                "mid_report_time": {
+                    "description": "中短期预报起报时间",
+                    "type": "string"
+                },
+                "mid_span": {
+                    "description": "中短期预报时间轴步长（秒）",
+                    "type": "integer"
+                },
+                "precip": {
+                    "description": "降雨预报，6小时间隔，7天区间",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "pressure": {
+                    "description": "气压预报，6小时间隔，7天区间",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "rh2": {
+                    "description": "湿度预报，6小时间隔，7天区间",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "short_precip": {
+                    "description": "短临降雨预报，6分钟间隔，3小时区间，共30个",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "short_report_time": {
+                    "description": "短临降雨起报时间",
+                    "type": "string"
+                },
+                "short_span": {
+                    "description": "短临预报时间轴步长（秒）",
+                    "type": "integer"
+                },
+                "t2": {
+                    "description": "气温预报，6小时间隔，7天区间",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "wdir10": {
+                    "description": "风向预报，6小时间隔，7天区间",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "ws": {
+                    "description": "风速预报，6小时间隔，7天区间",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                }
+            }
+        },
+        "entity.MidMeteoData": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "description": "格点一维坐标：Y * 6939 + X + 1",
+                    "type": "integer"
+                },
+                "mid_report_time": {
+                    "description": "中短期预报起报时间",
+                    "type": "string"
+                },
+                "mid_span": {
+                    "description": "中短期预报时间轴步长（秒）",
+                    "type": "integer"
+                },
+                "precip": {
+                    "description": "降雨预报，6小时间隔，7天区间",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "pressure": {
+                    "description": "气压预报，6小时间隔，7天区间",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "rh2": {
+                    "description": "湿度预报，6小时间隔，7天区间",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "short_precip": {
+                    "description": "短临降雨预报，6分钟间隔，3小时区间，共30个",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "short_report_time": {
+                    "description": "短临降雨起报时间",
+                    "type": "string"
+                },
+                "short_span": {
+                    "description": "短临预报时间轴步长（秒）",
+                    "type": "integer"
+                },
+                "t2": {
+                    "description": "气温预报，6小时间隔，7天区间",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "wdir10": {
+                    "description": "风向预报，6小时间隔，7天区间",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "ws": {
+                    "description": "风速预报，6小时间隔，7天区间",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                }
+            }
+        },
+        "entity.Setting": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "description": "ID",
+                    "type": "integer"
+                },
+                "section": {
+                    "description": "设置所属分栏，enum(预警-alert)",
+                    "type": "string"
+                },
+                "value": {
+                    "description": "设置的值",
+                    "type": "object"
+                }
+            }
+        },
+        "entity.SpanFactorThemeReq": {
+            "type": "object",
+            "properties": {
+                "themes": {
+                    "description": "需要下载的要素列表",
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "factor": {
+                                "description": "气象要素, enum(临近降雨,中短期降雨,中短期气压,中短期温度,中短期湿度,中短期风场)",
+                                "type": "string"
+                            },
+                            "title": {
+                                "description": "专题图标题",
+                                "type": "string"
+                            }
+                        }
+                    }
+                },
+                "vec_id": {
+                    "description": "矢量图层ID",
+                    "type": "integer"
+                }
+            }
+        },
+        "entity.TaskFactorThemeReq": {
+            "type": "object",
+            "properties": {
+                "adcode": {
+                    "description": "行政区划编码",
+                    "type": "string"
+                },
+                "district": {
+                    "description": "行政区划名称",
+                    "type": "string"
+                },
+                "themes": {
+                    "description": "需要下载的要素列表",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/entity.ThemeFactor"
+                    }
+                }
+            }
+        },
+        "entity.ThemeFactor": {
+            "type": "object",
+            "properties": {
+                "factor": {
+                    "description": "气象要素, enum(降雨,气压,温度,湿度,风场)",
+                    "type": "string"
+                },
+                "title": {
+                    "description": "专题图标题",
+                    "type": "string"
+                }
+            }
+        },
+        "entity.TmpShpRet": {
+            "type": "object",
+            "properties": {
+                "ss": {
+                    "description": "shp解析出的WKT列表",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "uid": {
+                    "description": "已上传shp对应的uid",
+                    "type": "string"
+                }
+            }
+        },
+        "entity.TmpWktBuff": {
+            "type": "object",
+            "properties": {
+                "distance": {
+                    "description": "外扩距离（单位：千米）",
+                    "type": "integer"
+                },
+                "ss": {
+                    "description": "WKT列表",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "entity.VectorLayer": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "description": "创建时间（自动生成）",
+                    "type": "string"
+                },
+                "desc": {
+                    "description": "描述",
+                    "type": "string"
+                },
+                "distance": {
+                    "description": "图斑默认外扩距离（单位：千米）",
+                    "type": "integer"
+                },
+                "id": {
+                    "description": "矢量图层ID",
+                    "type": "integer"
+                },
+                "name": {
+                    "description": "名称",
+                    "type": "string"
+                },
+                "updated_at": {
+                    "description": "更新时间（自动生成）",
+                    "type": "string"
+                }
+            }
+        },
+        "resp.AlertOfSettingsResponse": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "code",
+                    "type": "integer",
+                    "enum": [
+                        200,
+                        400,
+                        401,
+                        500
+                    ]
+                },
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/entity.AlertOfSetting"
+                    }
+                },
+                "msg": {
+                    "description": "message",
+                    "type": "string"
+                }
+            }
+        },
+        "resp.AlertOptResponse": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "code",
+                    "type": "integer",
+                    "enum": [
+                        200,
+                        400,
+                        401,
+                        500
+                    ]
+                },
+                "data": {
+                    "$ref": "#/definitions/entity.AlertOpt"
+                },
+                "msg": {
+                    "description": "message",
+                    "type": "string"
+                }
+            }
+        },
+        "resp.AlertOptsResponse": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "code",
+                    "type": "integer",
+                    "enum": [
+                        200,
+                        400,
+                        401,
+                        500
+                    ]
+                },
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/entity.AlertOpt"
+                    }
+                },
+                "msg": {
+                    "description": "message",
+                    "type": "string"
+                }
+            }
+        },
+        "resp.CronTaskResponse": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "code",
+                    "type": "integer",
+                    "enum": [
+                        200,
+                        400,
+                        401,
+                        500
+                    ]
+                },
+                "data": {
+                    "$ref": "#/definitions/entity.CronTask"
+                },
+                "msg": {
+                    "description": "message",
+                    "type": "string"
+                }
+            }
+        },
+        "resp.CronTasksResponse": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "code",
+                    "type": "integer",
+                    "enum": [
+                        200,
+                        400,
+                        401,
+                        500
+                    ]
+                },
+                "data": {
+                    "type": "object",
+                    "properties": {
+                        "list": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/entity.CronTask"
+                            }
+                        },
+                        "total": {
+                            "type": "integer"
+                        }
+                    }
+                },
+                "msg": {
+                    "description": "message",
+                    "type": "string"
+                }
+            }
+        },
+        "resp.DistAlertsResponse": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "code",
+                    "type": "integer",
+                    "enum": [
+                        200,
+                        400,
+                        401,
+                        500
+                    ]
+                },
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/entity.DistAlert"
+                    }
+                },
+                "msg": {
+                    "description": "message",
+                    "type": "string"
+                }
+            }
+        },
+        "resp.FeedbackResponse": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "code",
+                    "type": "integer",
+                    "enum": [
+                        200,
+                        400,
+                        401,
+                        500
+                    ]
+                },
+                "data": {
+                    "$ref": "#/definitions/entity.Feedback"
+                },
+                "msg": {
+                    "description": "message",
+                    "type": "string"
+                }
+            }
+        },
+        "resp.FocusedDistMeteo": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "description": "ID",
+                    "type": "integer"
+                },
+                "meteo": {
+                    "$ref": "#/definitions/entity.MidMeteoData"
+                },
+                "section": {
+                    "description": "设置所属分栏，enum(预警-alert)",
+                    "type": "string"
+                },
+                "value": {
+                    "description": "设置的值",
+                    "type": "object"
+                }
+            }
+        },
+        "resp.FocusedDistMeteoResponse": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "code",
+                    "type": "integer",
+                    "enum": [
+                        200,
+                        400,
+                        401,
+                        500
+                    ]
+                },
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/resp.FocusedDistMeteo"
+                    }
+                },
+                "msg": {
+                    "description": "message",
+                    "type": "string"
+                }
+            }
+        },
+        "resp.IdData": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "resp.IdResponse": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "code",
+                    "type": "integer",
+                    "enum": [
+                        200,
+                        400,
+                        401,
+                        500
+                    ]
+                },
+                "data": {
+                    "$ref": "#/definitions/resp.IdData"
+                },
+                "msg": {
+                    "description": "message",
+                    "type": "string"
+                }
+            }
+        },
+        "resp.IdsData": {
+            "type": "object",
+            "properties": {
+                "ids": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                }
+            }
+        },
+        "resp.IdsResponse": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "code",
+                    "type": "integer",
+                    "enum": [
+                        200,
+                        400,
+                        401,
+                        500
+                    ]
+                },
+                "data": {
+                    "$ref": "#/definitions/resp.IdsData"
+                },
+                "msg": {
+                    "description": "message",
+                    "type": "string"
+                }
+            }
+        },
+        "resp.JsApiSigResponse": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "code",
+                    "type": "integer",
+                    "enum": [
+                        200,
+                        400,
+                        401,
+                        500
+                    ]
+                },
+                "data": {
+                    "$ref": "#/definitions/entity.JsApiSig"
+                },
+                "msg": {
+                    "description": "message",
+                    "type": "string"
+                }
+            }
+        },
+        "resp.LabelingDatResponse": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "code",
+                    "type": "integer",
+                    "enum": [
+                        200,
+                        400,
+                        401,
+                        500
+                    ]
+                },
+                "data": {
+                    "$ref": "#/definitions/entity.LabelingData"
+                },
+                "msg": {
+                    "description": "message",
+                    "type": "string"
+                }
+            }
+        },
+        "resp.LabelingDataResponse": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "code",
+                    "type": "integer",
+                    "enum": [
+                        200,
+                        400,
+                        401,
+                        500
+                    ]
+                },
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/entity.LabelingData"
+                    }
+                },
+                "msg": {
+                    "description": "message",
+                    "type": "string"
+                }
+            }
+        },
+        "resp.MeteoDataResponse": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "code",
+                    "type": "integer",
+                    "enum": [
+                        200,
+                        400,
+                        401,
+                        500
+                    ]
+                },
+                "data": {
+                    "$ref": "#/definitions/entity.MeteoDataOne"
+                },
+                "msg": {
+                    "description": "message",
+                    "type": "string"
+                }
+            }
+        },
+        "resp.MeteoDetailAndAlert": {
+            "type": "object",
+            "properties": {
+                "alert": {
+                    "description": "气象预警列表",
+                    "type": "object"
+                },
+                "id": {
+                    "description": "格点一维坐标：Y * 6939 + X + 1",
+                    "type": "integer"
+                },
+                "mid_report_time": {
+                    "description": "中短期预报起报时间",
+                    "type": "string"
+                },
+                "mid_span": {
+                    "description": "中短期预报时间轴步长（秒）",
+                    "type": "integer"
+                },
+                "precip": {
+                    "description": "降雨预报，6小时间隔，7天区间",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "pressure": {
+                    "description": "气压预报，6小时间隔，7天区间",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "rh2": {
+                    "description": "湿度预报，6小时间隔，7天区间",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "short_precip": {
+                    "description": "短临降雨预报，6分钟间隔，3小时区间，共30个",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "short_report_time": {
+                    "description": "短临降雨起报时间",
+                    "type": "string"
+                },
+                "short_span": {
+                    "description": "短临预报时间轴步长（秒）",
+                    "type": "integer"
+                },
+                "t2": {
+                    "description": "气温预报，6小时间隔，7天区间",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "wdir10": {
+                    "description": "风向预报，6小时间隔，7天区间",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "ws": {
+                    "description": "风速预报，6小时间隔，7天区间",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                }
+            }
+        },
+        "resp.MeteoDetailAndAlertResponse": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "code",
+                    "type": "integer",
+                    "enum": [
+                        200,
+                        400,
+                        401,
+                        500
+                    ]
+                },
+                "data": {
+                    "$ref": "#/definitions/resp.MeteoDetailAndAlert"
+                },
+                "msg": {
+                    "description": "message",
+                    "type": "string"
+                }
+            }
+        },
+        "resp.MeteoDsResponse": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "code",
+                    "type": "integer",
+                    "enum": [
+                        200,
+                        400,
+                        401,
+                        500
+                    ]
+                },
+                "data": {
+                    "$ref": "#/definitions/entity.MeteoDataList"
+                },
+                "msg": {
+                    "description": "message",
+                    "type": "string"
+                }
+            }
+        },
+        "resp.MeteoServicesResponse": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "code",
+                    "type": "integer",
+                    "enum": [
+                        200,
+                        400,
+                        401,
+                        500
+                    ]
+                },
+                "data": {
+                    "$ref": "#/definitions/dto.MeteoServices"
+                },
+                "msg": {
+                    "description": "message",
+                    "type": "string"
+                }
+            }
+        },
+        "resp.MidMeteoDataResponse": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "code",
+                    "type": "integer",
+                    "enum": [
+                        200,
+                        400,
+                        401,
+                        500
+                    ]
+                },
+                "data": {
+                    "$ref": "#/definitions/entity.MidMeteoData"
+                },
+                "msg": {
+                    "description": "message",
+                    "type": "string"
+                }
+            }
+        },
+        "resp.Response": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "code",
+                    "type": "integer",
+                    "enum": [
+                        200,
+                        400,
+                        401,
+                        500
+                    ]
+                },
+                "data": {
+                    "description": "data",
+                    "type": "object"
+                },
+                "msg": {
+                    "description": "message",
+                    "type": "string"
+                }
+            }
+        },
+        "resp.SettingResponse": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "code",
+                    "type": "integer",
+                    "enum": [
+                        200,
+                        400,
+                        401,
+                        500
+                    ]
+                },
+                "data": {
+                    "$ref": "#/definitions/entity.Setting"
+                },
+                "msg": {
+                    "description": "message",
+                    "type": "string"
+                }
+            }
+        },
+        "resp.SettingsResponse": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "code",
+                    "type": "integer",
+                    "enum": [
+                        200,
+                        400,
+                        401,
+                        500
+                    ]
+                },
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/entity.Setting"
+                    }
+                },
+                "msg": {
+                    "description": "message",
+                    "type": "string"
+                }
+            }
+        },
+        "resp.TmpShpRetResponse": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "code",
+                    "type": "integer",
+                    "enum": [
+                        200,
+                        400,
+                        401,
+                        500
+                    ]
+                },
+                "data": {
+                    "$ref": "#/definitions/entity.TmpShpRet"
+                },
+                "msg": {
+                    "description": "message",
+                    "type": "string"
+                }
+            }
+        },
+        "resp.TmpWktBuffResponse": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "code",
+                    "type": "integer",
+                    "enum": [
+                        200,
+                        400,
+                        401,
+                        500
+                    ]
+                },
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "msg": {
+                    "description": "message",
+                    "type": "string"
+                }
+            }
+        },
+        "resp.VectorLayerResponse": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "code",
+                    "type": "integer",
+                    "enum": [
+                        200,
+                        400,
+                        401,
+                        500
+                    ]
+                },
+                "data": {
+                    "$ref": "#/definitions/entity.VectorLayer"
+                },
+                "msg": {
+                    "description": "message",
+                    "type": "string"
+                }
+            }
+        },
+        "resp.VectorLayersResponse": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "code",
+                    "type": "integer",
+                    "enum": [
+                        200,
+                        400,
+                        401,
+                        500
+                    ]
+                },
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/entity.VectorLayer"
+                    }
+                },
+                "msg": {
+                    "description": "message",
+                    "type": "string"
+                }
+            }
+        }
+    }
+}
